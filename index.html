@@ -3,39 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DeluxeMenu Crafter</title>
+    <title>DeluxeMenu 作成ツール</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app">
         <aside class="side">
-            <div class="logo">DM CRAFTER</div>
+            <div class="logo">DM 作成ツール</div>
             <nav>
-                <div class="item active">EDITOR</div>
-                <div class="item">YAML PREVIEW</div>
+                <div class="item active">エディタ</div>
+                <div class="item">YAMLプレビュー</div>
             </nav>
         </aside>
 
         <main class="main">
             <div class="inv-box">
+                <div class="inv-title">メニュー編集画面</div>
                 <div class="grid" id="inventory"></div>
             </div>
         </main>
 
         <section class="prop">
-            <h3>ITEM SETTINGS</h3>
+            <h3>アイテム設定</h3>
             <div class="input-group">
-                <label>DISPLAY NAME</label>
-                <input type="text" id="name" placeholder="&bNew Item">
+                <label>表示名 (Display Name)</label>
+                <input type="text" id="name" placeholder="&b新しいアイテム">
             </div>
             <div class="input-group">
-                <label>MATERIAL ID</label>
+                <label>マテリアル ID (Material)</label>
                 <input type="text" id="mat" placeholder="DIAMOND">
             </div>
-            <button id="save-btn">SAVE TO SLOT</button>
+            <div class="input-group">
+                <label>説明文 (Lore)</label>
+                <textarea id="lore" rows="4" placeholder="&7クリックでテレポート"></textarea>
+            </div>
+            <button id="save-btn">スロットに保存</button>
         </section>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
