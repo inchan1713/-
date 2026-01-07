@@ -11,7 +11,7 @@ body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-
 /* 中央：石レンガ背景 */
 .main { 
     flex-grow: 1; display: flex; align-items: center; justify-content: center;
-    background-image: url('bg-stone.png'); 
+    background-image: url('boddy.png')
     background-size: 128px; background-repeat: repeat; image-rendering: pixelated;
     box-shadow: inset 0 0 150px rgba(0,0,0,0.7); 
 }
@@ -28,4 +28,5 @@ body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-
 h3 { color: #f5c2e7; margin: 0 0 20px 0; border-bottom: 1px solid #313244; padding-bottom: 10px; }
 label { display: block; font-size: 11px; color: #89b4fa; margin-bottom: 5px; font-weight: bold; }
 input { width: 100%; background: #313244; border: 1px solid #45475a; color: #fff; padding: 10px; border-radius: 4px; box-sizing: border-box; margin-bottom: 15px; }
+
 button { width: 100%; padding: 15px; background: #89b4fa; border: none; font-weight: bold; cursor: pointer; border-radius: 4px; color: #11111b; }
