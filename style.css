@@ -28,3 +28,56 @@ label { display: block; font-size: 11px; color: #89b4fa; margin-bottom: 5px; fon
 input, textarea { width: 100%; background: #313244; border: 1px solid #45475a; color: #fff; padding: 10px; border-radius: 4px; box-sizing: border-box; margin-bottom: 15px; font-family: inherit; }
 button { width: 100%; padding: 15px; background: #89b4fa; border: none; font-weight: bold; cursor: pointer; border-radius: 4px; color: #11111b; transition: 0.2s; }
 button:hover { background: #b4befe; }
+
+/* サイドバーの項目をオシャレに */
+.item { 
+    padding: 12px 20px; 
+    margin: 4px 10px;
+    border-radius: 8px;
+    cursor: pointer; 
+    color: #a6adc8; 
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+.item:hover { background: rgba(137, 180, 250, 0.1); color: #fff; }
+.item.active { background: #313244; color: #89b4fa; }
+
+/* インベントリスロットの改良 */
+.slot { 
+    width: 52px; height: 52px; 
+    background: #8b8b8b; 
+    border: 2px solid; 
+    border-color: #373737 #fff #fff #373737; 
+    display: flex; align-items: center; justify-content: center; 
+    position: relative; /* 番号表示のため */
+}
+
+/* スロット番号のスタイル */
+.slot::after {
+    content: attr(data-slot); /* JavaScriptで番号を流し込みます */
+    position: absolute;
+    top: 2px; left: 2px;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: monospace;
+}
+
+/* 選択中のスロットを青く光らせる */
+.slot.selected {
+    outline: 3px solid #89b4fa;
+    outline-offset: -2px;
+    z-index: 10;
+    box-shadow: 0 0 15px rgba(137, 180, 250, 0.6);
+}
+
+/* 右パネルの入力欄をカッコよく */
+input, textarea {
+    background: #1e1e2e; /* 少し深みのある色に */
+    border: 1px solid #45475a;
+    transition: border 0.3s;
+}
+input:focus, textarea:focus {
+    border-color: #89b4fa;
+    outline: none;
+    box-shadow: 0 0 8px rgba(137, 180, 250, 0.3);
+}
