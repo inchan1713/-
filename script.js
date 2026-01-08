@@ -8,6 +8,7 @@ async function loadMinecraftItems() {
     const materialInput = document.getElementById('material-id');
     if (!materialInput) return;
 
+    // 1.21.4のデータURL
     const url = 'https://raw.githubusercontent.com/PrismarineJS/minecraft-data/master/data/pc/1.21.4/items.json';
 
     try {
@@ -46,17 +47,14 @@ function initInventory() {
         slot.classList.add('slot');
         slot.dataset.index = i;
         
-        // スロット番号を薄く表示（任意）
+        // スロット番号
         const span = document.createElement('span');
-        span.style.fontSize = '10px';
-        span.style.color = '#555';
         span.innerText = i;
         slot.appendChild(span);
 
         slot.addEventListener('click', () => {
             document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
             slot.classList.add('selected');
-            console.log("スロット " + i + " が選択されました");
         });
         inventory.appendChild(slot);
     }
@@ -70,7 +68,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // 保存ボタンの動作
 document.getElementById('save-btn')?.addEventListener('click', () => {
-    const materialValue = document.getElementById('material-id').value.toUpperCase();
+    const materialInput = document.getElementById('material-id');
+    const materialValue = materialInput.value.toUpperCase().trim();
     const selectedSlot = document.querySelector('.slot.selected');
 
     if (!selectedSlot) {
@@ -79,19 +78,28 @@ document.getElementById('save-btn')?.addEventListener('click', () => {
     }
 
     if (minecraftItems.includes(materialValue)) {
-        // 画像を表示
-        let img = selectedSlot.querySelector('img');
-        if (!img) {
-            img = document.createElement('img');
-            selectedSlot.appendChild(img);
-        }
-        // mc-headsのAPIで画像を表示（小文字にする必要がある）
-        img.src = `https://mc-heads.net/item/${materialValue.toLowerCase()}`;
-        img.style.width = '32px';
-        img.style.height = '32px';
+        // すでにある画像を消して新しく作り直す
+        const oldImg = selectedSlot.querySelector('img');
+        if (oldImg) oldImg.remove();
+
+        const img = document.createElement('img');
+        const lowerId = materialValue.toLowerCase();
+
+        // 画像取得URL（優先順位をつけて2つ試す）
+        // 1. Minecraft Assets API (1.21対応)
+        // 2. mc-heads (バックアップ)
+        img.src = `https://minecraft-api.vercel.app/images/items/${lowerId}.png`;
         
-        alert("✅ スロット " + selectedSlot.dataset.index + " に保存しました");
+        // もし1枚目が読み込めなかったら、2枚目のURLを試す
+        img.onerror = () => {
+            img.src = `https://mc-heads.net/item/${lowerId}`;
+        };
+
+        img.alt = materialValue;
+        selectedSlot.appendChild(img);
+        
+        console.log("スロット " + selectedSlot.dataset.index + " に " + materialValue + " を配置しました");
     } else {
-        alert("⚠️ アイテムIDが正しくありません。");
+        alert("⚠️ アイテムID '" + materialValue + "' は正しくない可能性があります。");
     }
 });
