@@ -1,98 +1,60 @@
-/* --- ベース設定 --- */
+/* ベース：余計なぼかしを抑え、清潔感を出す */
 body, html { 
     margin: 0; padding: 0; height: 100%; 
-    font-family: "Segoe UI", "Meiryo", sans-serif; 
-    background: #0b0b10; color: #cdd6f4; overflow: hidden; 
+    font-family: sans-serif; 
+    background: #1a1b26; color: #a9b1d6; overflow: hidden; 
 }
 .app { display: flex; height: 100vh; }
 
-/* --- ガラス質感のサイドバー --- */
-.side { 
-    width: 240px; 
-    background: rgba(24, 24, 37, 0.8); 
-    backdrop-filter: blur(10px); /* 背景を透かしてぼかす */
-    border-right: 1px solid rgba(255, 255, 255, 0.1); 
-    flex-shrink: 0; 
-}
-.logo { 
-    padding: 30px 25px; font-weight: 900; font-size: 1.2rem; 
-    color: #89b4fa; text-shadow: 0 0 10px rgba(137, 180, 250, 0.5);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
-}
-.item { 
-    padding: 15px 20px; margin: 10px 15px; border-radius: 12px;
-    cursor: pointer; color: #a6adc8; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.item:hover { background: rgba(255, 255, 255, 0.05); color: #fff; transform: translateX(5px); }
-.item.active { background: #89b4fa; color: #11111b; font-weight: bold; box-shadow: 0 4px 15px rgba(137, 180, 250, 0.4); }
+/* サイドバー：透かさず、落ち着いた色で固定 */
+.side { width: 220px; background: #16161e; border-right: 1px solid #24283b; flex-shrink: 0; }
+.logo { padding: 25px; font-weight: bold; color: #7aa2f7; border-bottom: 1px solid #24283b; }
+.item { padding: 15px 25px; cursor: pointer; color: #565f89; }
+.item.active { background: #24283b; color: #7aa2f7; border-left: 4px solid #7aa2f7; }
 
-/* --- 中央：奥行きのある背景 --- */
-.main { flex-grow: 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+/* 中央：背景は大きくするが、明るすぎないように */
+.main { flex-grow: 1; display: flex; align-items: center; justify-content: center; position: relative; background: #1a1b26; }
 .main::before {
-    content: ""; position: absolute; top: -5%; left: -5%; right: -5%; bottom: -5%;
-    background-image: url('bg.png'); background-size: 350px; background-repeat: repeat;
-    image-rendering: pixelated; filter: blur(6px) brightness(0.2); z-index: 1;
+    content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('bg.png'); background-size: 200px; /* シンプルに見やすいサイズ */
+    background-repeat: repeat; image-rendering: pixelated;
+    filter: brightness(0.2); z-index: 1;
 }
 
-/* --- 進化したインベントリ --- */
+/* インベントリ：マイクラ標準の見た目を重視 */
 .inv-box { 
-    position: relative; z-index: 2; 
-    background: #c6c6c6; padding: 8px 15px 15px 15px; 
-    border: 4px solid #444; 
-    box-shadow: 
-        inset -4px -4px 0 #222, 
-        inset 4px 4px 0 #eee, 
-        0 40px 100px rgba(0,0,0,0.9); /* 超重厚な影 */
+    position: relative; z-index: 2; background: #c6c6c6; padding: 10px; 
+    border: 3px solid #555; 
+    box-shadow: inset -3px -3px 0 #333, inset 3px 3px 0 #fff; 
 }
-.inv-title { color: #222; font-size: 13px; margin-bottom: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-.grid { display: grid; grid-template-columns: repeat(9, 54px); gap: 4px; background: #8b8b8b; padding: 2px; }
+.grid { display: grid; grid-template-columns: repeat(9, 52px); gap: 2px; background: #8b8b8b; }
 
-/* スロット：立体感とアニメーション */
 .slot { 
-    width: 54px; height: 54px; background: #8b8b8b; 
-    border: 3px solid; border-color: #373737 #fff #fff #373737; 
+    width: 52px; height: 52px; background: #8b8b8b; 
+    border: 2px solid; border-color: #373737 #fff #fff #373737; 
     display: flex; align-items: center; justify-content: center; 
-    position: relative; transition: all 0.1s;
+    position: relative;
 }
-.slot:hover { 
-    transform: scale(1.05); /* 少し大きく */
-    z-index: 10; 
-    filter: brightness(1.2);
-    box-shadow: 0 0 20px rgba(255,255,255,0.4);
-    cursor: pointer; 
+/* スロット番号：シンプルに配置 */
+.slot::after {
+    content: attr(data-slot); position: absolute; top: 2px; left: 4px;
+    font-size: 10px; color: rgba(255, 255, 255, 0.3);
 }
-.slot:active { transform: scale(0.95); } /* 押した感 */
+/* 選択：シンプルに枠線だけで表現 */
 .slot.selected {
-    outline: 4px solid #89b4fa; outline-offset: -2px;
-    background: rgba(137, 180, 250, 0.3);
-    box-shadow: 0 0 25px rgba(137, 180, 250, 0.8);
+    outline: 2px solid #fff;
+    outline-offset: -2px;
+    background: rgba(255, 255, 255, 0.1);
 }
 
-/* --- 右パネル：ネオン・エディタ --- */
-.prop { 
-    width: 340px; background: #11111b; 
-    border-left: 1px solid rgba(255, 255, 255, 0.1); 
-    padding: 30px; flex-shrink: 0; box-sizing: border-box; 
-}
-h3 { color: #f5c2e7; margin: 0 0 25px 0; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
-h3::before { content: "⚙️"; font-size: 1rem; }
-
-label { display: block; font-size: 10px; color: #89b4fa; margin-bottom: 8px; font-weight: 900; letter-spacing: 1.5px; }
+/* 右パネル：事務的な使いやすさを優先 */
+.prop { width: 300px; background: #16161e; border-left: 1px solid #24283b; padding: 25px; box-sizing: border-box; }
+label { display: block; font-size: 11px; color: #7aa2f7; margin-bottom: 5px; font-weight: bold; }
 input, textarea { 
-    width: 100%; background: #181825; border: 1px solid #313244; 
-    color: #cdd6f4; padding: 14px; border-radius: 10px; box-sizing: border-box; 
-    font-family: "Consolas", monospace; font-size: 13px; transition: all 0.3s;
-    margin-bottom: 20px;
+    width: 100%; background: #1a1b26; border: 1px solid #24283b; 
+    color: #fff; padding: 10px; border-radius: 4px; margin-bottom: 15px; 
 }
-input:focus, textarea:focus { 
-    border-color: #89b4fa; background: #1e1e2e;
-    box-shadow: 0 0 15px rgba(137, 180, 250, 0.2); outline: none; 
-}
-
 button { 
-    width: 100%; padding: 18px; background: linear-gradient(135deg, #89b4fa, #b4befe); 
-    border: none; font-weight: 900; cursor: pointer; border-radius: 12px; 
-    color: #11111b; text-transform: uppercase; letter-spacing: 1px;
-    box-shadow: 0 4px 15px rgba(137, 180, 250, 0.3); transition: all 0.3s;
+    width: 100%; padding: 12px; background: #7aa2f7; border: none; 
+    font-weight: bold; cursor: pointer; border-radius: 4px; color: #16161e; 
 }
-button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(137, 180, 250, 0.5); }
