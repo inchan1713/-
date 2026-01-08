@@ -1,47 +1,42 @@
-/* ベースレイアウト */
+/* 全体レイアウト */
 body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #1a1b26; color: #a9b1d6; overflow: hidden; }
 .app { display: flex; height: 100vh; width: 100vw; }
 
-/* 左右パネル */
-.side { width: 220px; background: #16161e; border-right: 1px solid #24283b; flex-shrink: 0; }
-.logo { padding: 20px; font-weight: bold; color: #7aa2f7; border-bottom: 1px solid #24283b; }
-.item { padding: 15px 20px; cursor: pointer; color: #565f89; }
-.item.active { background: #24283b; color: #7aa2f7; border-left: 4px solid #7aa2f7; }
+.side { width: 240px; background: #16161e; border-right: 1px solid #24283b; flex-shrink: 0; }
+.logo { padding: 25px; font-weight: bold; color: #7aa2f7; border-bottom: 1px solid #24283b; }
 
-/* メイン：インベントリ */
+/* 中央：インベントリ */
 .main { flex-grow: 1; display: flex; align-items: center; justify-content: center; background: #1a1b26; }
 
 /* インベントリ外枠 */
 .inv-box { 
     background: #c6c6c6; padding: 6px; border: 4px solid #ffffff;
     border-right-color: #555555; border-bottom-color: #555555;
-    box-shadow: 10px 10px 0 rgba(0,0,0,0.4);
 }
-.grid { display: grid; grid-template-columns: repeat(9, 54px); gap: 0; background: #8b8b8b; border: 2px solid #373737; }
+.grid { display: grid; grid-template-columns: repeat(9, 52px); gap: 0; background: #8b8b8b; border: 2px solid #373737; }
 
-/* スロット */
+/* スロット：サイズを52pxに微調整（計算を綺麗にするため） */
 .slot { 
-    width: 54px; height: 54px; background: #8b8b8b; 
-    border: 3px solid; border-color: #373737 #ffffff #ffffff #373737; 
+    width: 52px; height: 52px; background: #8b8b8b; 
+    border: 2px solid; border-color: #373737 #ffffff #ffffff #373737; 
     display: flex; align-items: center; justify-content: center; 
     position: relative; box-sizing: border-box;
 }
 
-/* ★スプライト画像表示用の設定（ガビガビ対策済）★ */
-.item-icon {
+/* ★超・解像度対策★ */
+.slot img {
     width: 32px; height: 32px;
-    background-image: url('https://files.vultam.com/mc_items_1.21.png'); /* 1.21対応スプライト */
-    background-repeat: no-repeat;
-    background-size: 1024px auto; /* シート全体のサイズ */
+    image-rendering: -webkit-optimize-contrast;
     image-rendering: pixelated;
-    display: block;
+    image-rendering: crisp-edges;
+    object-fit: contain;
 }
 
-.slot.selected { background-color: rgba(255, 255, 255, 0.4); outline: 3px solid #fff; outline-offset: -3px; }
-.slot span { position: absolute; top: 1px; left: 3px; font-size: 9px; color: rgba(0,0,0,0.2); }
+.slot.selected { background-color: rgba(255, 255, 255, 0.5); outline: 2px solid #fff; }
+.slot span { position: absolute; top: 2px; left: 4px; font-size: 9px; color: rgba(0,0,0,0.3); }
 
 /* 右パネル */
-.prop { width: 320px; background: #16161e; border-left: 1px solid #24283b; padding: 20px; flex-shrink: 0; box-sizing: border-box; }
-label { display: block; font-size: 12px; color: #7aa2f7; margin-bottom: 5px; font-weight: bold; }
-input, textarea { width: 100%; background: #1a1b26; border: 1px solid #24283b; color: #fff; padding: 10px; border-radius: 4px; margin-bottom: 15px; box-sizing: border-box; }
-button { width: 100%; padding: 12px; background: #7aa2f7; border: none; font-weight: bold; cursor: pointer; border-radius: 4px; color: #16161e; }
+.prop { width: 340px; background: #16161e; border-left: 1px solid #24283b; padding: 25px; flex-shrink: 0; box-sizing: border-box; }
+label { display: block; font-size: 12px; color: #7aa2f7; margin-bottom: 5px; }
+input, textarea { width: 100%; background: #1a1b26; border: 1px solid #24283b; color: #fff; padding: 12px; margin-bottom: 15px; box-sizing: border-box; }
+button { width: 100%; padding: 15px; background: #7aa2f7; border: none; font-weight: bold; cursor: pointer; color: #16161e; }
