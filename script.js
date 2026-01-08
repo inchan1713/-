@@ -1,27 +1,32 @@
 let minecraftItems = [];
 
-// Wiki形式のデータを含む最新リストを取得
+// 1. アイテムリスト読み込み & 予測変換の強制有効化
 async function loadMinecraftItems() {
     const url = 'https://raw.githubusercontent.com/PrismarineJS/minecraft-data/master/data/pc/1.21.4/items.json';
     try {
         const response = await fetch(url);
         const data = await response.json();
-        
-        // 予測変換用のリストを作成 (例: DIAMOND_SWORD)
         minecraftItems = data.map(item => item.name.toUpperCase());
 
-        // 予測変換(datalist)を復活させる
-        const materialInput = document.getElementById('material-id');
-        let dataList = document.getElementById('item-suggestions');
+        // datalistを確実に生成して紐付ける
+        const input = document.getElementById('material-id');
+        let dl = document.getElementById('item-suggestions');
         
-        if (materialInput && dataList) {
-            dataList.innerHTML = minecraftItems.map(id => `<option value="${id}">`).join('');
-            materialInput.setAttribute('list', 'item-suggestions'); // 紐付け
-            console.log("✅ 予測変換を有効化しました");
+        // もしHTMLにdatalistがなければ作る
+        if (!dl) {
+            dl = document.createElement('datalist');
+            dl.id = 'item-suggestions';
+            document.body.appendChild(dl);
         }
-    } catch (e) { console.error("データ読み込み失敗", e); }
+        
+        dl.innerHTML = minecraftItems.map(id => `<option value="${id}">`).join('');
+        input.setAttribute('list', 'item-suggestions');
+        
+        console.log("✅ 予測変換リストを同期しました");
+    } catch (e) { console.error("データ取得失敗"); }
 }
 
+// 2. インベントリ生成
 function initInventory() {
     const inventory = document.getElementById('inventory');
     if (!inventory) return;
@@ -38,55 +43,56 @@ function initInventory() {
     }
 }
 
-// Wikiの画像名ルールに変換する関数
-function getWikiFileName(id) {
-    // 例: DIAMOND_SWORD -> Diamond_Sword
-    return id.toLowerCase().split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('_');
+// Wiki用ファイル名変換 (例: DIAMOND_SWORD -> Diamond_Sword)
+function toWikiName(id) {
+    return id.toLowerCase().split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('_');
 }
 
+// 3. アイテム配置処理 (デバッグ済)
 document.getElementById('save-btn')?.addEventListener('click', () => {
-    const materialValue = document.getElementById('material-id').value.toUpperCase().trim();
-    const selectedSlot = document.querySelector('.slot.selected');
+    const val = document.getElementById('material-id').value.toUpperCase().trim();
+    const slot = document.querySelector('.slot.selected');
 
-    if (!selectedSlot || !materialValue) return;
+    if (!slot || !val) return;
+    if (!minecraftItems.includes(val)) return alert("無効なアイテムIDです");
 
-    // 既存の画像を削除
-    selectedSlot.querySelectorAll('img, .no-img').forEach(el => el.remove());
+    slot.querySelectorAll('img, .no-img').forEach(el => el.remove());
 
-    const lowerId = materialValue.toLowerCase();
-    const wikiName = getWikiFileName(materialValue);
-    
-    // 画像取得の優先順位を「Wiki」と「MC-Heads」に絞る
+    const wikiName = toWikiName(val);
+    const lowId = val.toLowerCase();
+
+    // 【デバッグ】Wikiを最優先にし、ダメならバックアップ
     const urls = [
-        `https://mc-heads.net/item/${lowerId}`, // コンパス、時計、ポーションに非常に強い
-        `https://minecraft.wiki/images/Invicon_${wikiName}.png`, // Wikiのアイコン形式
-        `https://minecraft-api.vercel.app/images/items/${lowerId}.png` // 予備
+        `https://minecraft.wiki/images/Invicon_${wikiName}.png`, // Wikiの標準アイコン
+        `https://minecraft.wiki/images/${wikiName}.png`,        // Wikiの直ファイル名
+        `https://mc-heads.net/item/${lowId}`,                   // バックアップ1 (コンパスに強い)
+        `https://minecraft-api.vercel.app/images/items/${lowId}.png` // バックアップ2
     ];
 
     const img = document.createElement('img');
-    let attempt = 0;
+    let idx = 0;
 
     const tryLoad = () => {
-        img.src = urls[attempt];
+        img.src = urls[idx];
     };
 
     img.onerror = () => {
-        attempt++;
-        if (attempt < urls.length) {
+        idx++;
+        if (idx < urls.length) {
             tryLoad();
         } else {
             const err = document.createElement('div');
             err.className = 'no-img';
             err.innerText = '無';
-            err.style.fontSize = '12px';
-            selectedSlot.appendChild(err);
+            slot.appendChild(err);
         }
     };
 
-    selectedSlot.appendChild(img);
+    slot.appendChild(img);
     tryLoad();
 });
 
+// 初期起動
 window.onload = () => {
     loadMinecraftItems();
     initInventory();
