@@ -2,30 +2,24 @@
 body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #1a1b26; color: #a9b1d6; overflow: hidden; }
 .app { display: flex; height: 100vh; width: 100vw; }
 
-/* 左右パネルの幅をしっかり確保 */
-.side { width: 240px; background: #16161e; border-right: 1px solid #24283b; flex-shrink: 0; }
-.prop { width: 340px; background: #16161e; border-left: 1px solid #24283b; padding: 25px; flex-shrink: 0; box-sizing: border-box; }
+/* サイドバー */
+.side { width: 220px; background: #16161e; border-right: 1px solid #24283b; flex-shrink: 0; display: flex; flex-direction: column; }
+.logo { padding: 25px; font-weight: bold; color: #7aa2f7; border-bottom: 1px solid #24283b; }
+.item { padding: 15px 25px; cursor: pointer; color: #565f89; }
+.item.active { background: #24283b; color: #7aa2f7; border-left: 4px solid #7aa2f7; }
 
-/* 中央：UIを小さくしすぎない */
-.main { flex-grow: 1; display: flex; align-items: center; justify-content: center; background: #1a1b26; transform: scale(0.9); /* ここで全体の大きさを微調整 */ }
+/* メインエリア */
+.main { flex-grow: 1; display: flex; align-items: center; justify-content: center; background: #1a1b26; }
 
-/* インベントリ外枠：隙間を埋めるためにデザインを変更 */
+/* インベントリボックス */
 .inv-box { 
-    background: #c6c6c6; padding: 6px; 
-    border: 4px solid #ffffff;
+    background: #c6c6c6; padding: 8px; border: 4px solid #ffffff;
     border-right-color: #555555; border-bottom-color: #555555;
-    box-shadow: 10px 10px 0 rgba(0,0,0,0.3);
+    box-shadow: 10px 10px 0 rgba(0,0,0,0.4);
 }
+.grid { display: grid; grid-template-columns: repeat(9, 54px); gap: 0; background: #8b8b8b; border: 2px solid #373737; }
 
-/* 9x6グリッド：隙間を物理的に消す */
-.grid { 
-    display: grid; 
-    grid-template-columns: repeat(9, 54px); 
-    background: #8b8b8b; 
-    gap: 0; /* 隙間ゼロ */
-}
-
-/* スロット：枠線を太くして画像との一体感を出す */
+/* スロット：枠のズレをなくす */
 .slot { 
     width: 54px; height: 54px; background: #8b8b8b; 
     border: 3px solid; border-color: #373737 #ffffff #ffffff #373737; 
@@ -33,20 +27,21 @@ body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-
     position: relative; box-sizing: border-box;
 }
 
-/* ★画像：ガビガビを消すための魔法のプロパティ */
+/* ★最強のガビガビ対策：16pxの整数倍にする★ */
 .slot img {
-    width: 44px; height: 44px;
-    image-rendering: -webkit-optimize-contrast; /* Chromeでのぼやけ防止 */
+    width: 32px; height: 32px;
     image-rendering: pixelated; 
     image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor;
     object-fit: contain;
     display: block;
 }
 
-/* 選択ハイライト */
-.slot.selected { background-color: rgba(255, 255, 255, 0.45); outline: 3px solid #ffffff; outline-offset: -3px; }
+.slot.selected { background-color: rgba(255, 255, 255, 0.45); outline: 3px solid #fff; outline-offset: -3px; }
+.slot span { position: absolute; top: 2px; left: 4px; font-size: 10px; color: rgba(0,0,0,0.15); pointer-events: none; }
 
-/* 入力周り */
-label { display: block; font-size: 13px; color: #7aa2f7; margin-bottom: 8px; font-weight: bold; }
+/* 右パネル */
+.prop { width: 320px; background: #16161e; border-left: 1px solid #24283b; padding: 25px; flex-shrink: 0; box-sizing: border-box; }
+label { display: block; font-size: 12px; color: #7aa2f7; margin-bottom: 8px; font-weight: bold; }
 input, textarea { width: 100%; background: #1a1b26; border: 1px solid #24283b; color: #fff; padding: 12px; border-radius: 4px; margin-bottom: 20px; box-sizing: border-box; }
 button { width: 100%; padding: 15px; background: #7aa2f7; border: none; font-weight: bold; cursor: pointer; border-radius: 4px; color: #16161e; }
