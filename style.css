@@ -29,19 +29,20 @@ body, html {
 }
 .grid { display: grid; grid-template-columns: repeat(9, 52px); gap: 2px; background: #8b8b8b; }
 
-/* スロット単体：枠線の色をマイクラ風に修正 */
+/* スロット単体 */
 .slot { 
     width: 52px; height: 52px; background: #8b8b8b; 
     border: 2px solid; border-color: #373737 #fff #fff #373737; 
     display: flex; align-items: center; justify-content: center; 
     position: relative; box-sizing: border-box;
+    overflow: hidden; /* はみ出し防止 */
 }
 
 /* スロット番号 */
 .slot span {
     position: absolute; top: 2px; left: 4px;
     font-size: 10px; color: rgba(255, 255, 255, 0.4);
-    z-index: 1; pointer-events: none;
+    z-index: 5; pointer-events: none;
 }
 
 /* 選択時のハイライト */
@@ -51,12 +52,12 @@ body, html {
     background: rgba(255, 255, 255, 0.3);
 }
 
-/* アイテム画像：画質とサイズの改善 */
+/* アイテム画像：画質とサイズの決定版 */
 .slot img {
-    width: 48px;      /* 隙間を埋めるためサイズアップ */
-    height: 48px;
-    image-rendering: pixelated; /* ドットをくっきりさせる（重要） */
-    image-rendering: -moz-crisp-edges; /* Firefox用 */
+    width: 44px;      /* 隙間を埋めつつ、枠に当たらない絶妙なサイズ */
+    height: 44px;
+    image-rendering: pixelated; 
+    image-rendering: crisp-edges;
     object-fit: contain;
     display: block;
     z-index: 2;
