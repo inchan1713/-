@@ -67,3 +67,32 @@ button {
     image-rendering: pixelated;
     pointer-events: none; /* アイコンを突き抜けてスロットをクリック可能にする */
 }
+
+/* スロット内の画像スタイル */
+.slot img {
+    width: 80%;       /* 枠の8割くらいの大きさにする */
+    height: 80%;
+    object-fit: contain; /* 縦横比を維持 */
+    display: block;
+    margin: auto;     /* 真ん中に寄せる */
+    pointer-events: none; /* 画像がクリックの邪魔をしないようにする */
+}
+
+/* スロット自体を中央揃えの設定にする */
+.slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    /* 既存のスタイルがあればそれに合わせて調整してください */
+}
+
+/* スロット番号の文字が画像の下に隠れるように調整 */
+.slot span {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.3); /* 薄く表示 */
+    z-index: 1;
+}
