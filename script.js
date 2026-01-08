@@ -1,16 +1,18 @@
 let minecraftItems = [];
+const SPRITE_SIZE = 32; // アイテム1つのサイズ
+const SHEET_WIDTH = 32; // 横に並んでいるアイテム数
 
 async function loadMinecraftItems() {
+    // 1.21対応のアイテムリストを取得
     const url = 'https://raw.githubusercontent.com/PrismarineJS/minecraft-data/master/data/pc/1.21.4/items.json';
     try {
         const response = await fetch(url);
-        const data = await response.json();
-        minecraftItems = data.map(item => item.name.toUpperCase());
+        minecraftItems = await response.json();
         const dataList = document.getElementById('item-suggestions') || document.createElement('datalist');
         dataList.id = 'item-suggestions';
         document.body.appendChild(dataList);
         document.getElementById('material-id').setAttribute('list', 'item-suggestions');
-        dataList.innerHTML = minecraftItems.map(id => `<option value="${id}">`).join('');
+        dataList.innerHTML = minecraftItems.map(item => `<option value="${item.name.toUpperCase()}">`).join('');
     } catch (e) { console.error("データ読み込み失敗"); }
 }
 
@@ -34,40 +36,26 @@ document.getElementById('save-btn')?.addEventListener('click', () => {
     const selectedSlot = document.querySelector('.slot.selected');
 
     if (!selectedSlot) return alert("スロットを選択してください");
-    if (!minecraftItems.includes(materialValue)) return alert("無効なアイテムIDです");
+    
+    // アイテムを探す（IDまたは名前）
+    const itemData = minecraftItems.find(item => item.name.toUpperCase() === materialValue);
+    
+    if (itemData) {
+        selectedSlot.querySelectorAll('.item-icon, .no-img').forEach(el => el.remove());
 
-    selectedSlot.querySelectorAll('img, .no-img').forEach(el => el.remove());
+        // スプライト上の位置を計算 (indexを利用)
+        const iconIndex = itemData.id; 
+        const x = (iconIndex % SHEET_WIDTH) * SPRITE_SIZE;
+        const y = Math.floor(iconIndex / SHEET_WIDTH) * SPRITE_SIZE;
 
-    const lowerId = materialValue.toLowerCase();
-    const img = document.createElement('img');
-
-    // ★最強の画像パスリスト：上から順に試す
-    const urls = [
-        // 1. Minecraft Wiki 形式（コンパスやポーションに一番強い）
-        `https://minecraft.wiki/images/Invicon_${materialValue}.png`,
-        // 2. MC-Heads (動的生成なのでポーションの色に強い)
-        `https://mc-heads.net/item/${lowerId}`,
-        // 3. PrismarineJS (最新アイテムに強い)
-        `https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.21/items/${lowerId}.png`
-    ];
-
-    let idx = 0;
-    const tryNext = () => {
-        if (idx < urls.length) {
-            img.src = urls[idx];
-            idx++;
-        } else {
-            const noImg = document.createElement('div');
-            noImg.className = 'no-img';
-            noImg.innerText = '無';
-            noImg.style.fontSize = '10px';
-            selectedSlot.appendChild(noImg);
-        }
-    };
-
-    img.onerror = tryNext;
-    selectedSlot.appendChild(img);
-    tryNext();
+        const icon = document.createElement('div');
+        icon.className = 'item-icon';
+        icon.style.backgroundPosition = `-${x}px -${y}px`;
+        
+        selectedSlot.appendChild(icon);
+    } else {
+        alert("無効なアイテムIDです。候補から選んでください。");
+    }
 });
 
 window.addEventListener('DOMContentLoaded', () => {
