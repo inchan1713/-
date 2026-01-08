@@ -3,18 +3,16 @@ let minecraftItems = [];
 async function loadMinecraftItems() {
     const materialInput = document.getElementById('material-id');
     const url = 'https://raw.githubusercontent.com/PrismarineJS/minecraft-data/master/data/pc/1.21.4/items.json';
-
     try {
         const response = await fetch(url);
         const data = await response.json();
         minecraftItems = data.map(item => item.name.toUpperCase());
-
         let dataList = document.getElementById('item-suggestions') || document.createElement('datalist');
         dataList.id = 'item-suggestions';
         document.body.appendChild(dataList);
         materialInput.setAttribute('list', 'item-suggestions');
         dataList.innerHTML = minecraftItems.map(id => `<option value="${id}">`).join('');
-    } catch (e) { console.error("アイテム読み込み失敗"); }
+    } catch (e) { console.error("データ取得失敗"); }
 }
 
 function initInventory() {
@@ -32,11 +30,9 @@ function initInventory() {
     }
 }
 
-// 保存ボタン：画像取得の決定版
 document.getElementById('save-btn')?.addEventListener('click', () => {
     const materialValue = document.getElementById('material-id').value.toUpperCase().trim();
     const selectedSlot = document.querySelector('.slot.selected');
-
     if (!selectedSlot) return alert("スロットを選択してください");
 
     if (minecraftItems.includes(materialValue)) {
@@ -44,11 +40,11 @@ document.getElementById('save-btn')?.addEventListener('click', () => {
         const img = document.createElement('img');
         const lowerId = materialValue.toLowerCase();
 
-        // 試行するURLリスト
+        // 解決策：画像URLの優先順位を「一番綺麗に出る場所」に変更
         const urls = [
-            `https://minecraft-api.vercel.app/images/items/${lowerId}.png`, // 基本
-            `https://mc-heads.net/item/${lowerId}`, // コンパス等に強い
-            `https://assets.mcasset.cloud/1.21.1/assets/minecraft/textures/item/${lowerId}.png` // 公式アセット
+            `https://minecraft.wiki/images/${materialValue}_JE3_BE3.png`, // Wikiの直リンク（高画質・コンパス等に強い）
+            `https://mc-heads.net/item/${lowerId}`, // 予備
+            `https://minecraft-api.vercel.app/images/items/${lowerId}.png` // 最終予備
         ];
 
         let idx = 0;
@@ -56,11 +52,10 @@ document.getElementById('save-btn')?.addEventListener('click', () => {
         img.onerror = () => {
             idx++;
             if (idx < urls.length) img.src = urls[idx];
-            else console.log("画像なし: " + lowerId);
         };
 
         selectedSlot.appendChild(img);
-    } else { alert("アイテムIDが正しくありません"); }
+    } else { alert("アイテムIDが違います"); }
 });
 
 window.addEventListener('DOMContentLoaded', () => {
