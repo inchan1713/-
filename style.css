@@ -1,4 +1,4 @@
-/* ベース：余計なぼかしを抑え、清潔感を出す */
+/* ベース設定 */
 body, html { 
     margin: 0; padding: 0; height: 100%; 
     font-family: sans-serif; 
@@ -6,22 +6,22 @@ body, html {
 }
 .app { display: flex; height: 100vh; }
 
-/* サイドバー：透かさず、落ち着いた色で固定 */
+/* サイドバー */
 .side { width: 220px; background: #16161e; border-right: 1px solid #24283b; flex-shrink: 0; }
 .logo { padding: 25px; font-weight: bold; color: #7aa2f7; border-bottom: 1px solid #24283b; }
 .item { padding: 15px 25px; cursor: pointer; color: #565f89; }
 .item.active { background: #24283b; color: #7aa2f7; border-left: 4px solid #7aa2f7; }
 
-/* 中央：背景は大きくするが、明るすぎないように */
+/* 中央エリア */
 .main { flex-grow: 1; display: flex; align-items: center; justify-content: center; position: relative; background: #1a1b26; }
 .main::before {
     content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    background-image: url('bg.png'); background-size: 200px; /* シンプルに見やすいサイズ */
+    background-image: url('bg.png'); background-size: 200px;
     background-repeat: repeat; image-rendering: pixelated;
     filter: brightness(0.2); z-index: 1;
 }
 
-/* インベントリ：マイクラ標準の見た目を重視 */
+/* インベントリボックス */
 .inv-box { 
     position: relative; z-index: 2; background: #c6c6c6; padding: 10px; 
     border: 3px solid #555; 
@@ -29,70 +29,47 @@ body, html {
 }
 .grid { display: grid; grid-template-columns: repeat(9, 52px); gap: 2px; background: #8b8b8b; }
 
+/* スロット単体 */
 .slot { 
     width: 52px; height: 52px; background: #8b8b8b; 
     border: 2px solid; border-color: #373737 #fff #fff #373737; 
     display: flex; align-items: center; justify-content: center; 
-    position: relative;
+    position: relative; box-sizing: border-box;
 }
-/* スロット番号：シンプルに配置 */
-.slot::after {
-    content: attr(data-slot); position: absolute; top: 2px; left: 4px;
+
+/* スロット番号 */
+.slot span {
+    position: absolute; top: 2px; left: 4px;
     font-size: 10px; color: rgba(255, 255, 255, 0.3);
+    z-index: 1; pointer-events: none;
 }
-/* 選択：シンプルに枠線だけで表現 */
+
+/* 選択時のハイライト */
 .slot.selected {
     outline: 2px solid #fff;
     outline-offset: -2px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.2);
 }
 
-/* 右パネル：事務的な使いやすさを優先 */
+/* アイテム画像：ここを強化 */
+.slot img {
+    width: 40px;      /* 52pxのスロットに対して適切なサイズ */
+    height: 40px;
+    image-rendering: pixelated; /* マイクラのドットをくっきりさせる */
+    object-fit: contain;
+    display: block;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* 右パネル */
 .prop { width: 300px; background: #16161e; border-left: 1px solid #24283b; padding: 25px; box-sizing: border-box; }
 label { display: block; font-size: 11px; color: #7aa2f7; margin-bottom: 5px; font-weight: bold; }
 input, textarea { 
     width: 100%; background: #1a1b26; border: 1px solid #24283b; 
-    color: #fff; padding: 10px; border-radius: 4px; margin-bottom: 15px; 
+    color: #fff; padding: 10px; border-radius: 4px; margin-bottom: 15px; box-sizing: border-box;
 }
 button { 
     width: 100%; padding: 12px; background: #7aa2f7; border: none; 
     font-weight: bold; cursor: pointer; border-radius: 4px; color: #16161e; 
-
-    
-}
-
-.item-icon {
-    width: 32px;
-    height: 32px;
-    image-rendering: pixelated;
-    pointer-events: none; /* アイコンを突き抜けてスロットをクリック可能にする */
-}
-
-/* スロット内の画像スタイル */
-.slot img {
-    width: 80%;       /* 枠の8割くらいの大きさにする */
-    height: 80%;
-    object-fit: contain; /* 縦横比を維持 */
-    display: block;
-    margin: auto;     /* 真ん中に寄せる */
-    pointer-events: none; /* 画像がクリックの邪魔をしないようにする */
-}
-
-/* スロット自体を中央揃えの設定にする */
-.slot {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    /* 既存のスタイルがあればそれに合わせて調整してください */
-}
-
-/* スロット番号の文字が画像の下に隠れるように調整 */
-.slot span {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.3); /* 薄く表示 */
-    z-index: 1;
 }
