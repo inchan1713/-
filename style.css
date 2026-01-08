@@ -61,3 +61,9 @@ button {
     
 }
 
+.item-icon {
+    width: 32px;
+    height: 32px;
+    image-rendering: pixelated;
+    pointer-events: none; /* アイコンを突き抜けてスロットをクリック可能にする */
+}
