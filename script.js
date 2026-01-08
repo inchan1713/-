@@ -1,5 +1,8 @@
 const inventory = document.getElementById('inventory');
 const matInput = document.getElementById('mat');
+const nameInput = document.getElementById('name');
+const loreInput = document.getElementById('lore');
+const saveBtn = document.getElementById('save-btn');
 
 // 1. 54個のスロットを生成
 for (let i = 0; i < 54; i++) {
@@ -16,28 +19,33 @@ for (let i = 0; i < 54; i++) {
         document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
         slot.classList.add('selected');
         
-        if (img.dataset.id) {
-            matInput.value = img.dataset.id;
-        }
+        // スロットがデータを持っていれば入力欄に反映
+        matInput.value = img.dataset.id || "";
     });
     inventory.appendChild(slot);
 }
 
-// 2. 入力時の画像更新
-matInput.addEventListener('input', (e) => {
-    const val = e.target.value.toUpperCase().trim();
+// 2. 「スロットに保存」ボタンを押した時にアイコンを確定させる
+saveBtn.addEventListener('click', () => {
     const selected = document.querySelector('.slot.selected');
+    if (!selected) {
+        alert("スロットを選択してください！");
+        return;
+    }
 
-    if (!selected) return;
+    const val = matInput.value.toUpperCase().trim();
     const img = selected.querySelector('img');
 
     if (val !== "") {
-        // 画像を表示
+        // 画像を更新して表示
         img.src = `https://minecraft-api.com/api/items/${val.toLowerCase()}/64.png`;
         img.style.display = 'block';
-        img.dataset.id = val;
+        img.dataset.id = val; // スロット自体にIDを保存
         
-        img.onerror = () => { img.style.display = 'none'; };
+        img.onerror = () => { 
+            img.style.display = 'none'; 
+            alert("アイテムIDが正しくない可能性があります。");
+        };
     } else {
         img.style.display = 'none';
         img.dataset.id = "";
