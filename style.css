@@ -1,71 +1,50 @@
-/* ベース設定 */
-body, html { 
-    margin: 0; padding: 0; height: 100%; 
-    font-family: sans-serif; background: #1a1b26; color: #a9b1d6; overflow: hidden; 
-}
+/* ベース */
+body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; background: #1a1b26; color: #a9b1d6; overflow: hidden; }
 .app { display: flex; height: 100vh; }
-
-/* サイドバー */
-.side { width: 220px; background: #16161e; border-right: 1px solid #24283b; flex-shrink: 0; }
-.logo { padding: 25px; font-weight: bold; color: #7aa2f7; border-bottom: 1px solid #24283b; }
-.item { padding: 15px 25px; cursor: pointer; color: #565f89; }
-
-/* 中央：背景 */
 .main { flex-grow: 1; display: flex; align-items: center; justify-content: center; position: relative; }
-.main::before {
-    content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    background-image: url('bg.png'); background-size: 200px;
-    background-repeat: repeat; image-rendering: pixelated;
-    filter: brightness(0.2); z-index: 1;
-}
 
-/* インベントリ外枠（理想の例に合わせたグレーと影） */
+/* インベントリ外枠：本物の色味に修正 */
 .inv-box { 
-    position: relative; z-index: 2; background: #c6c6c6; padding: 12px; 
-    border-top: 3px solid #fff; border-left: 3px solid #fff;
-    border-right: 3px solid #555; border-bottom: 3px solid #555;
+    position: relative; z-index: 2; background: #c6c6c6; padding: 9px; 
+    border: 3px solid #ffffff;
+    box-shadow: 3px 3px 0 #555555; /* 右下影 */
 }
 
-/* 9x6のグリッド */
+/* 9x6グリッド：隙間を完全にゼロにする */
 .grid { 
-    display: grid; grid-template-columns: repeat(9, 54px); 
+    display: grid; 
+    grid-template-columns: repeat(9, 54px); 
     grid-template-rows: repeat(6, 54px); 
+    gap: 0; /* 隙間をゼロに */
     background: #8b8b8b; 
+    border: 3px solid #373737; /* グリッド全体の黒枠 */
 }
 
-/* スロット：本物に近い凹凸デザイン */
+/* スロット：本物の凹凸を再現 */
 .slot { 
-    width: 54px; height: 54px; background: #8b8b8b; 
-    border: 3px solid; border-color: #373737 #fff #fff #373737; 
+    width: 54px; height: 54px; 
+    background: #8b8b8b;
+    border: 3px solid; 
+    /* 上と左を暗く、右と下を明るくすることで「凹み」を表現 */
+    border-color: #373737 #ffffff #ffffff #373737; 
     display: flex; align-items: center; justify-content: center; 
     position: relative; box-sizing: border-box;
 }
 
-/* スロット番号を邪魔にならない程度に */
-.slot span {
-    position: absolute; top: 2px; left: 4px;
-    font-size: 10px; color: rgba(0, 0, 0, 0.2); z-index: 5;
-}
-
-/* 選択ハイライト（半透明の白） */
+/* 選択ハイライト */
 .slot.selected {
     background-color: rgba(255, 255, 255, 0.4);
-    z-index: 10;
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-/* ★画像の設定：ガビガビを直し、隙間をなくす */
+/* アイテム画像：パキパキ感を最大化 */
 .slot img {
     width: 48px; height: 48px;
-    /* ドット絵を最高画質で表示する設定 */
-    image-rendering: pixelated; 
-    image-rendering: -moz-crisp-edges;
+    image-rendering: pixelated; /* これがガビガビ対策 */
     image-rendering: crisp-edges;
     object-fit: contain;
-    pointer-events: none;
+    display: block;
 }
 
-/* 右パネル */
-.prop { width: 300px; background: #16161e; border-left: 1px solid #24283b; padding: 25px; box-sizing: border-box; }
-label { display: block; font-size: 11px; color: #7aa2f7; margin-bottom: 5px; font-weight: bold; }
-input { width: 100%; background: #1a1b26; border: 1px solid #24283b; color: #fff; padding: 10px; margin-bottom: 15px; }
-button { width: 100%; padding: 12px; background: #7aa2f7; border: none; font-weight: bold; cursor: pointer; color: #16161e; }
+/* 番号（デバッグ用なので薄く） */
+.slot span { position: absolute; top: 1px; left: 3px; font-size: 9px; color: rgba(0,0,0,0.15); pointer-events: none; }
